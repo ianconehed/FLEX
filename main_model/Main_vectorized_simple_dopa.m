@@ -2,7 +2,7 @@ clear all
 close all
 %% Parameter initialization
 run('spiking_parameters_simple_dopa.m') %most parameters are stored in this file
-plot_var = 0;
+plot_var = 1; %set to 0 to turn off trial by trial plotting
 %% main program
 for l = 1:num_trials
     tic
@@ -33,7 +33,9 @@ for l = 1:num_trials
     %% learning per trial 
 %     eta_hebb = (l>num_trials/8).*eta_hebb_l;
 %     eta_ff = (l>num_trials/8).*eta_ff_l;
-%     eta_rec = (l>num_trials/8).*eta_rec_l;
+%     eta_rec = (l>num_trials/8).*eta_rec_l; %change conditional statement
+%     to turn on/off learning for different trials (here the first
+%     num_trials/8 have no learning)
     
     eta_hebb = (l>1).*eta_hebb_l;
     eta_ff = (l>1).*eta_ff_l;
@@ -77,8 +79,6 @@ for l = 1:num_trials
         hebb_rec = R_it(:,t-D)*R_it(:,t-dt)';
         hebb_ff = R_it(:,t-D)*R_yt(:,t-dt)';
         
-        
-        
         H_d(rec_identity) = eta_d*hebb_rec(rec_identity)/T_max_d;
         H_d(ff_identity) = eta_d1*hebb_ff(ff_identity)/T_max_d1;
         H_p(rec_identity) = eta_p*hebb_rec(rec_identity)/T_max_p;
@@ -103,9 +103,8 @@ for l = 1:num_trials
             *(dopa(t-1)/num_VTA)*dt;
         
         temp_hebb = R_it(:,t-D)*R_kt(:,t-dt)';
-%         temp_hebb = R_kt(:,t-D)*R_it(:,t-dt)';
         del_P_ik(hebb_identity) = del_P_ik(hebb_identity)...
-            + eta_hebb(hebb_identity).*temp_hebb(hebb_identity)*(dopa(t-1))/num_VTA - lambda_P*P_ik(hebb_identity);
+            + eta_hebb(hebb_identity).*temp_hebb(hebb_identity)*(dopa(t-1))/num_VTA;
 
         %% Updating conductances 
         g_Ey = W_in*s_yt; %input conductance
@@ -119,11 +118,11 @@ for l = 1:num_trials
         dopa(t) = dopa_func(mean(temp_dopa),thresh_size,d_0); 
         %% save traces for plotting
         if select_rec == 1
-            T_pt(t) = mean(T_ijp(1:npp,1:npp),'all')*100000; %recurrent
-            T_dt(t) = mean(T_ijd(1:npp,1:npp),'all')*100000; %recurrent
+            T_pt(t) = mean(T_ijp(1:npp,1:npp),'all')*100000; %recurrent LTP traces
+            T_dt(t) = mean(T_ijd(1:npp,1:npp),'all')*100000; %recurrent LTD traces
         else
-            T_pt(t) = mean(T_ijp(N-num_VTA+1:N,1:npp),'all')*5000000; %ff
-            T_dt(t) = mean(T_ijd(N-num_VTA+1:N,1:npp),'all')*5000000; %ff
+            T_pt(t) = mean(T_ijp(N-num_VTA+1:N,1:npp),'all')*5000000; %ff LTP traces
+            T_dt(t) = mean(T_ijd(N-num_VTA+1:N,1:npp),'all')*5000000; %ff LTD traces
         end
     end
     %% update weights
@@ -179,21 +178,6 @@ for l = 1:num_trials
 toc
 end
 %% plotting
-% mean_R = mean(R_it_l(N-num_VTA+1:N,:,:),1);
-% % mean_R = mean(R_it_l(1:100,:,:),1);
-% mean_R = reshape(mean_R,[t_total num_trials])';
-% % mean_R = mean(mean_R(1:20,:),1);
-% 
-% for l = 1:num_trials
-%     if l == 1
-%         figure
-%     end
-%     plot(mean_R(l,:))
-%     ylim([0 30])
-%     drawnow
-%     pause(.02)
-% end
-%%
 R_it = R_it*1000;
 R_it_l = R_it_l*1000;
 run('plotting_main_simple_dopa.m')

@@ -5,8 +5,10 @@ For this analysis place data for FirsTimeLearning, animals: 437:440,444:446, all
 Run matlab code DA_stat_cells_clean.m for all cells
 or DA_leaning_statistics_clean.m for one animal at a time.
 
-This code was written and run in MATLAB 2021a. Please direct any questions to ianconehed(at)gmail(dot)com. It was tested both on Mac and Windows platforms.
+For analysis of Coddington and Dudman, 2018, data is available from the authors by request.
 
-The code is described in the results and methods section.
+This code was written and run in MATLAB 2023b. Please direct any questions to ianconehed(at)gmail(dot)com. It was tested both on Mac and Windows platforms.
 
-Using Matlab there is no installation time. The only thing that can take a little time is downloading the data. The code takes at most minutes to run.
+
+
+

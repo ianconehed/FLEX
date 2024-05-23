@@ -7,8 +7,8 @@ N = ppc*num_columns + num_VTA;
 pop = num_columns*2;
 n = N;
 unit_num = 1:2:(2*num_columns);
-num_trials = 600;
-% num_trials = 80;
+% num_trials = 600;
+num_trials = 80;
 
 %% time parameters
 dt = 1; %time step
@@ -33,7 +33,7 @@ t_stim = [201 701 1101 2201 4001];
 t_reward = 1100;
 p_r = .03*dt; %poisson rate 40 Hz
 
-%% weight matrix parameters
+%% weight matrix initialization
 l5_rec = .00014;%.00016; DO NOT SET TO ZERO OR RECURRENT IDENTITY WILL BE WRONG
 l23_rec = .00000;
 l5_l23 = .0005; %.0002
@@ -91,14 +91,7 @@ T_max_p = .003; %maximum eligibility trace for LTP
 T_max_d = .0033; %maximum eligibility trace for LTD
 eta_p = 300; %
 eta_d = 135; %
-% tau_p = 2000; %LTP time constant
-% tau_d = 750; %LTD time constant
-% T_max_p = .003; %maximum eligibility trace for LTP
-% T_max_d = .003275; %maximum eligibility trace for LTD
-% eta_p = 150; %
-% eta_d = 40; %
 
-eta_rec_l = .00015; %learning rate
 tau_p1 = 2000;% tau_p1 = 200; %LTP time constant
 tau_d1 = 800;% tau_d1 = 800; %LTD time constant
 T_max_p1 = .0015;% T_max_p1 = .003; %maximum eligibility trace for LTP
@@ -107,6 +100,8 @@ eta_p1 = 650;% eta_p1 = 25*3000; %
 eta_d1 = 40;% eta_d1 = 15*3000; %
 trace_refractory = zeros(N,N);
 
+
+eta_rec_l = .00015; %learning rate
 eta_hebb_l = [zeros(N)];
 eta_hebb_l(201:300,101:200) = abs(.1*rand(npp,npp));
 eta_ff_l = [abs(1.25*rand(N,N))];
@@ -117,15 +112,10 @@ select_rec = 1;
 num_thresh_rec = 20;
 num_thresh_ff = 0;
 
-lambda_P = 0*.000005;
-
 
 %% additional parameters
 
 ROC_dt = 50;
-% [all_stim,one_stim,plot_R_it] = deal(zeros(pop,t_total/dt,num_trials+1));
-% R_it_l = zeros(N,t_total/dt,num_trials);
-% sc_R_it = zeros(N,t_total/dt,num_trials+1);
 [ff_vect, ff_vect1] = deal(zeros(1,num_trials+1));
 [rec_vect, rec_vect1] = deal(zeros(1,num_trials+1));
 [m_vect, m_vect1] = deal(zeros(1,num_trials+1));
@@ -135,12 +125,6 @@ auc_plot = zeros(length(N-num_VTA+1:N),(t_total-1)/ROC_dt);
 lambda = 0;
 temp_t = zeros(num_VTA,t_total/dt);
 rew_cons = 2;
-tr_clearing_cons_p = 0*200;
-tr_clearing_cons_d = 0*200;
-
-tr_clearing_cons_ff_p = 0*1;
-tr_clearing_cons_ff_d = 0*1;
-max_clearing_cons = .002;
 
 %% activation function parameters
 thresh_size = 4;

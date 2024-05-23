@@ -26,7 +26,7 @@ xlabel('Trial Number');
 ylabel('Mean inh Weight');
 %% means for plotting
 
-lengthie = 30;
+lengthie = 20;
 minus_trial = ceil(num_trials/3); 
 
 
