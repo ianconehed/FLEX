@@ -17,6 +17,6 @@ It is structured like the main_model folder, so running "Main_vectorized_simple_
 
 "spiking_parameters_simple_dopa.m" includes the parameters for this simulation, as before.
 
-To test the value network, follow the instructions in the comments "in value_wrapper.m"
+To test the value network, run "value_wrapper.m"
 
 This code was written and run in MATLAB 2023b. Please direct any questions to ianconehed(at)gmail(dot)com. It was tested both on Mac and Windows platforms. It should take no more than 30 minutes to run the code.
